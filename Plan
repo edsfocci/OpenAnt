@@ -1,0 +1,34 @@
+Open Ant
+Milestone plan
+This document describes the work package for each milestone. The set of functionnalities to be delivered with each milestones should be described in another document.
+
+
+GAME CORE                                                                        GRAPHICS
+Milestone 1 : Aboveground                                                        
+Move yellow ant around                                                           Set-up minimal GUI
+Deal with items (grab,drop,eat)                                                  Display aboveground map
+Put scents                                                                       Show aboveground elements
+*other outside-related activities should be implemented in this MS*              
+                                                                                 
+Milestone 2 : Undergound                                                         Show underground map
+Digging around and shit                                                          Show underground elements
+*other outside-related activities should be implemented in this MS*              
+                                                                                 
+Milestone 3 : Populate                                                           
+Create other kind of ants                                                        Set up sprites for new units
+Create other creatures                                                           Set up animations for combat and other events
+Write code for creatures' life system (health depletion)                         Set up interface to public game variable: health, caste system, graphics...
+Write combat code                                                                
+                                                                                 
+Milestone 4 : AI                                                                 
+Chose a system for the AI - moddable AI would be great.                          
+Write basic AI for units - movement, following scents, exchanging food...        
+
+
+
+
+
+
+
+
+
