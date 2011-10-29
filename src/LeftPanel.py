@@ -23,7 +23,7 @@ from HealthWidget import *
 import Globals
 
 class PictureButton(QAbstractButton):
-    def __init__(self, parent = None, clickedCall = "", pressedCall = "", icon = Globals.datadir + "images/button.png"):
+    def __init__(self, parent = None, clickedCall = "", pressedCall = "", icon = Globals.dataDir + "images/button.png"):
         super(PictureButton, self).__init__()
         self.icon = QImage(icon)
         if not clickedCall == "":
@@ -70,23 +70,23 @@ class LeftPanel(QDockWidget):
         hbox4 = QHBoxLayout()
         hbox5 = QHBoxLayout()
         
-        hbox1.addWidget(PictureButton(self, "help","",Globals.datadir + "images/UI/help.png"))
-        hbox1.addWidget(PictureButton(self, "experiment","",Globals.datadir + "images/UI/experiment.png"))
+        hbox1.addWidget(PictureButton(self, "help","",Globals.dataDir + "images/UI/help.png"))
+        hbox1.addWidget(PictureButton(self, "experiment","",Globals.dataDir + "images/UI/experiment.png"))
         vbox.addLayout(hbox1)
         
-        hbox2.addWidget(PictureButton(self, "map","",Globals.datadir + "images/UI/map.png"))
+        hbox2.addWidget(PictureButton(self, "map","",Globals.dataDir + "images/UI/map.png"))
         vbox.addLayout(hbox2)
         
-        hbox3.addWidget(PictureButton(self, "blackNest","",Globals.datadir + "images/UI/blackNest.png"))
-        hbox3.addWidget(PictureButton(self, "redNest","",Globals.datadir + "images/UI/redNest.png"))
+        hbox3.addWidget(PictureButton(self, "blackNest","",Globals.dataDir + "images/UI/blackNest.png"))
+        hbox3.addWidget(PictureButton(self, "redNest","",Globals.dataDir + "images/UI/redNest.png"))
         vbox.addLayout(hbox3)
         
-        hbox4.addWidget(PictureButton(self, "yellowAnt","",Globals.datadir + "images/UI/yellowAnt.png"))
-        hbox4.addWidget(PictureButton(self, "spider","",Globals.datadir + "images/UI/spider.png"))
+        hbox4.addWidget(PictureButton(self, "yellowAnt","",Globals.dataDir + "images/UI/yellowAnt.png"))
+        hbox4.addWidget(PictureButton(self, "spider","",Globals.dataDir + "images/UI/spider.png"))
         vbox.addLayout(hbox4)
         
-        hbox5.addWidget(PictureButton(self, "blackQueen","",Globals.datadir + "images/UI/blackQueen.png"))
-        hbox5.addWidget(PictureButton(self, "redQueen","",Globals.datadir + "images/UI/redQueen.png"))
+        hbox5.addWidget(PictureButton(self, "blackQueen","",Globals.dataDir + "images/UI/blackQueen.png"))
+        hbox5.addWidget(PictureButton(self, "redQueen","",Globals.dataDir + "images/UI/redQueen.png"))
         vbox.addLayout(hbox5)
         
         vbox.addWidget(HealthWidget())

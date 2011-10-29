@@ -23,28 +23,56 @@
 
 import Globals
 import numpy
+from Enums import *
 
 class View():
-    def __init__(self, mapSlice, hidden = False):
-        self.tiles = numpy.empty_like(mapSlice)
-        self.width = len(mapSlice)
-        self.height= len(mapSlice[0])
+    def __init__(self, mapSlice):
+       self.map = mapSlice
+       self.drawMap()
+       
+    def updateVisuals(self, unitList):
+        self.clearMap()
+        self.drawMap()
+        for unit in unitList:
+            image = Globals.dataDir + 'images/ants/' + 'yellowant.png'
+            Globals.glwidget.createImage(image , 2,[0, 32, 32, 32], [unit.positionX*Globals.pixelSize, unit.positionY*Globals.pixelSize, 32, 32])
+    
+    def drawMap(self):
+        self.tiles = self.map 
+        self.width = len(self.tiles)
+        self.height= len(self.tiles[0])
 
         Globals.glwidget.reserveVBOSize(self.width*self.height)
 
+ 
         for x in range(self.width):
             for y in range(self.height):
-                self.tiles[x][y] = Globals.glwidget.createImage(mapSlice[x,y].image, 0, [1, 1, -1, -1], [x*Globals.pixelsize, y*Globals.pixelsize, -1, -1], hidden)
+                if self.tiles[x][y].type == TileType.Ground:
+                    image =  Globals.dataDir + 'images/ground/ground1.png'
+                elif self.tiles[x][y].type == TileType.Rock:
+                    image =  Globals.dataDir + 'images/foliage/rock1.png'
+                Globals.glwidget.createImage(image, 0, [1, 1, -1, -1], [x*Globals.pixelSize, y*Globals.pixelSize, -1, -1], False)
+                
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.tiles[x][y].containsItem(Items.Peeble):
+                    image =  Globals.dataDir + 'images/foliage/foliage1.png'
+                    Globals.glwidget.createImage(image, 0, [1, 1, -1, -1], [x*Globals.pixelSize, y*Globals.pixelSize, -1, -1], False)
+                if self.tiles[x][y].containsItem(Items.Food):
+                    image =  Globals.dataDir + 'images/food/food.png'
+                    Globals.glwidget.createImage(image, 0, [1, 1, -1, -1], [x*Globals.pixelSize, y*Globals.pixelSize, -1, -1], False)
+                
     
-    def delete(self):
-	# Delete all images
-        pass # not implemented yet.
+   
+    def clearMap(self):
+        Globals.glwidget.deleteAllImages()
+
 
     def ground(self, x=0, y=0):
         Globals.leftBound = 0
-        Globals.rightBound = -1 * Globals.mapwidth * Globals.pixelsize
+        Globals.rightBound = -1 * Globals.mapwidth * Globals.pixelSize
         Globals.upBound = 0
-        Globals.downBound = -1 * (Globals.mapheight/2) * Globals.pixelsize
+        Globals.downBound = -1 * (Globals.mapheight/2) * Globals.pixelSize
         Globals.glwidget.camera[0] = x
         Globals.glwidget.camera[1] = y       
 
@@ -52,14 +80,14 @@ class View():
         Globals.leftBound = 0
         Globals.rightBound = Globals.redNestX
         Globals.upBound = Globals.blackNestY
-        Globals.downBound = -1 * Globals.mapheight * Globals.pixelsize
+        Globals.downBound = -1 * Globals.mapheight * Globals.pixelSize
         Globals.glwidget.camera[0] = x
         Globals.glwidget.camera[1] = y
         
     def redNest(self, x=Globals.redNestX,y=Globals.redNestY):
         Globals.leftBound = Globals.redNestY
-        Globals.rightBound = -1 * Globals.mapwidth * Globals.pixelsize
+        Globals.rightBound = -1 * Globals.mapwidth * Globals.pixelSize
         Globals.upBound = Globals.redNestY
-        Globals.downBound = -1 * Globals.mapheight * Globals.pixelsize
+        Globals.downBound = -1 * Globals.mapheight * Globals.pixelSize
         Globals.glwidget.camera[0] = x
         Globals.glwidget.camera[1] = y

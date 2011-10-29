@@ -15,16 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Created on Aug 3, 2011
-# Author: Sergei
-#
-# WorkerAnt class
 
-from GLWidget import *
-from PyQt4.QtCore import *
 from Ant import *
+from Creature import *
 
-class YellowAnt(Ant):
-    def __init__(self, xpos, ypos, tiles, sprite):
-        Ant.__init__(self, xpos, ypos, tiles, sprite)
-        self.speed = 7 
+class YellowAnt(Ant,Creature):
+    def __init__(self):
+        pass
