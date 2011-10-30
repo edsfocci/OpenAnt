@@ -15,11 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
 
-#
-# This is where all the globals of Open Ant are stored
-#
-# By Oipo (kingoipo@gmail.com)
-
 #general
 vbos = False
 glWidget = None

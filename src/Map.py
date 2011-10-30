@@ -7,13 +7,13 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
+# Open Ant is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Map Class
 
 import Globals
 from const.constants import *
@@ -21,6 +21,7 @@ from Enums import *
 from random import *
 from View import *
 from Tile import *
+from Scent import *
 
 class Map:
 
@@ -28,9 +29,10 @@ class Map:
    
     AStarMap = ""    #map of passable/not passable tiles.
     def __init__(self):
-        self.tiles = []        #the actual map
-      
-    #Map generation should be moved to own set of functions when it becomes more complex.
+        self.tiles = []            #the actual map
+        self.scentTiles = []       #List of tiles containing scent
+    
+    
     def generateMap(self):
     
     #1. Create tiles list
@@ -38,6 +40,7 @@ class Map:
             myList = []
             for j in range(Globals.mapHeight):
                 myList.append(Tile(TileType.Void))
+                myList[-1].setCoordinates(i,j)
             self.tiles.append(myList)
             
     #2. set tile type and content
@@ -46,7 +49,7 @@ class Map:
                 if randint(0,10) >= 1:
                     self.tiles[x][y].type = TileType.Ground;
                     if randint(0,10) > 9:
-                        self.tiles[x][y].items.append(Items.Peeble)
+                        self.tiles[x][y].items.append(Items.Pebble)
                 else:
                     self.tiles[x][y].type = TileType.Rock;
     #3. Put some food in there
@@ -74,6 +77,56 @@ class Map:
                     break
         return x, y
         
+        
+    #Note: Merge refreshScent functions to single function
+    def refreshScentYellow(self,(x,y),type):
+        if self.tiles[x][y].containsScent(type):
+                self.tiles[x][y].refreshScentYellow(type)
+        else:
+            scent = Scent(type)
+            scent.init()
+            self.tiles[x][y].scents.append(scent)
+            self.scentTiles.append(self.tiles[x][y])
+  
+    
+    def refreshScent(self,(x,y),type):
+        if self.tiles[x][y].containsScent(type):
+            self.tiles[x][y].refreshScent(type)
+        else:
+            scent = Scent(type)
+            scent.init()
+            self.tiles[x][y].scents.append(scent)
+            self.scentTiles.append(self.tiles[x][y])
+  
+    def updateScents(self):
+        for tile in self.scentTiles:
+            for scent in tile.scents:
+                if scent.strength == 0:
+                    #erase from tile's scent list
+                    tile.scents.remove(scent)
+                    if not tile.scents : #if tile's scent list empty, remove from map scentTiles list
+                        self.scentTiles.remove(tile)
+                else:
+                    scent.update()
+                if scent.type == Scents.Alarm and scent.propagateDelay % SCENT_PROPAGATE_DELAY == 0 and scent.strength > SCENT_INIT_STRENGTH:
+                    x,y = self.getPos(tile)
+                    #Alarm scent propagates to nearby tiles (cross propagation like on original game)
+                    self.refreshScent((x+1,y),Scents.Alarm)
+                    self.refreshScent((x-1,y),Scents.Alarm)
+                    self.refreshScent((x,y+1),Scents.Alarm)
+                    self.refreshScent((x,y-1),Scents.Alarm)
+
+    def getPos(self,tile):
+        for i,row in enumerate(self.tiles):
+            try:
+                tileIndex = row.index(tile)
+                x = i
+                y = tileIndex
+                return x,y
+            except: 
+                pass
+        Exception('Tile not found in tiles[][]')
+        
     def getTiles(self):
         return self.tiles
     
@@ -84,7 +137,11 @@ class Map:
         return self.item
     
     def putItem(self,(x,y),item):
-        self.tiles[x][y].addItem(item)
+        if self.tiles[x][y].isEmpty():
+            self.tiles[x][y].addItem(item)
+            return True
+        else:
+            return False
     
     def getAStarMap(self):
         if self.AStarMap == "":

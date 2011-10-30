@@ -14,8 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Ant class
+
 
 import Globals
 from algo.astar import *
@@ -65,6 +64,29 @@ class Creature():
         a = AStar(self.map.AStarMap, MANHATTAN)
         q = collections.deque()
         a.step(q)
-        if a.path and self.map.tiles[a.path[1][1]][a.path[1][0]].isPassable():
+        
+        if a.path and self.map.tiles[a.path[1][1]][a.path[1][0]].isPassable():  #Move unit
             self.positionX = a.path[1][1]
             self.positionY = a.path[1][0]
+            
+        if len(a.path) == 2 and not self.map.tiles[a.path[1][1]][a.path[1][0]].isPassable():    #if the dest tile is not passable and len(a.path)==2 then we are on the adjacent tile of the unpassable target -> movement done
+            self.destinationX = self.positionX 
+            self.destinationY = self.positionY
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            

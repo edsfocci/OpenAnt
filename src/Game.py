@@ -14,11 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-
-#
-# convenience class
-#
-# By Oipo (kingoipo@gmail.com)
            
 import Globals
 from Enums import *
@@ -47,7 +42,7 @@ class Game:
     def getSpawnLocation(self):
         x = randint(0, 10)
         y = randint(0, 10)
-        while not self.tiles[x][y].isPassable() :
+        while not self.tiles[x][y].isPassable() and self.tiles[x][y].isEmpty() :
             x = randint(0, 10)
             y = randint(0, 10)
         return x, y
@@ -60,8 +55,22 @@ class Game:
         
     def update(self):
         #self.d.debug_printMap(self.map)
+        #update existing scents
+        self.map.updateScents()
         for c in self.creatureList:
+            #move and perform action for each creature
             c.performAction()
+            if isinstance(c,YellowAnt): 
+                if c.item == Items.Food:
+                    self.map.refreshScentYellow(c.pos(),Scents.Trail)
+                if c.markAlarmScent == True:
+                    self.map.refreshScentYellow(c.pos(),Scents.Alarm)
+            else:
+                #refresh or create new scents
+                if c.item == Items.Food:
+                    self.map.refreshScent(c.pos(),Scents.Trail)
+            
+                
         
     def doubleClick(self,(x,y)):
         if  self.map.tiles[x][y].isEmpty():   #could be changed to interface function map.isTileEmpty((x,y))

@@ -14,12 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-#
-#
-# Transforms a slice of the map (along any axis) and generates a
-# viewable repersentation
-#
-# By phire (phire@gmail.com)
 
 import Globals
 import numpy
@@ -36,7 +30,7 @@ class View():
         for unit in unitList:
             image = Globals.dataDir + 'images/ants/' + 'yellowant.png'
             Globals.glwidget.createImage(image , 2,[0, 32, 32, 32], [unit.positionX*Globals.pixelSize, unit.positionY*Globals.pixelSize, 32, 32])
-    
+        
     def drawMap(self):
         self.tiles = self.map 
         self.width = len(self.tiles)
@@ -54,18 +48,30 @@ class View():
                 Globals.glwidget.createImage(image, 0, [1, 1, -1, -1], [x*Globals.pixelSize, y*Globals.pixelSize, -1, -1], False)
                 
         for x in range(self.width):
-            for y in range(self.height):
-                if self.tiles[x][y].containsItem(Items.Peeble):
+            for y in range(self.height):              
+                if self.tiles[x][y].containsScent(Scents.Trail):
+                    s = self.tiles[x][y].getScentStrength(Scents.Trail) 
+                    Globals.glwidget.addText( str(s) ,(x*Globals.mapWidth,y*Globals.mapHeight))           
+                    
+                if self.tiles[x][y].containsScent(Scents.Alarm):
+                    s = self.tiles[x][y].getScentStrength(Scents.Alarm) 
+                    Globals.glwidget.addText( str(s) ,(x*Globals.mapWidth,y*Globals.mapHeight+Globals.pixelSize/2))
+                    
+                if self.tiles[x][y].containsItem(Items.Pebble):
                     image =  Globals.dataDir + 'images/foliage/foliage1.png'
                     Globals.glwidget.createImage(image, 0, [1, 1, -1, -1], [x*Globals.pixelSize, y*Globals.pixelSize, -1, -1], False)
+                    
                 if self.tiles[x][y].containsItem(Items.Food):
                     image =  Globals.dataDir + 'images/food/food.png'
                     Globals.glwidget.createImage(image, 0, [1, 1, -1, -1], [x*Globals.pixelSize, y*Globals.pixelSize, -1, -1], False)
+                
                 
     
    
     def clearMap(self):
         Globals.glwidget.deleteAllImages()
+        Globals.glwidget.deleteAllText()
+        
 
 
     def ground(self, x=0, y=0):

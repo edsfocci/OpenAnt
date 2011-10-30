@@ -14,8 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Ant class
+
 from Creature import *
 
 class Ant(Creature):
@@ -26,10 +25,14 @@ class Ant(Creature):
         if (self.positionX,self.positionY) != (self.destinationX,self.destinationY):
             self.move()
         else:
-            if self.action == Actions.GrabItem:
+            if self.action == Actions.GrabItem:    
                 self.grabItem()
+                if(self.hp<30):
+                    self.eat()
             elif self.action == Actions.DropItem:
                 self.dropItem()
+            elif self.action == Actions.Eat:
+                self.eat()
             self.action = Actions.Idle
     
     def grabItem(self):
@@ -44,6 +47,11 @@ class Ant(Creature):
            self.map.putItem(self.pos(),self.item)
            self.item = Items.Void
         print self.item
+        
+    def eat(self):
+        if(self.item == Items.Food):
+            self.item = Items.Void
+            self.hp = 100
             
         
  

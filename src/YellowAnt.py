@@ -14,11 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-#
 
 from Ant import *
 from Creature import *
 
 class YellowAnt(Ant,Creature):
     def __init__(self):
+        self.markAlarmScent = True
         pass

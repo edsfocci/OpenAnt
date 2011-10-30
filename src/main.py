@@ -30,7 +30,6 @@ from Game  import *
 from TEMP  import *
 from Debug import *
 from View  import *
-from Visuals import *
 class OpenAnt(QApplication):
     
     def __init__(self):

@@ -390,8 +390,10 @@ class GLWidget(QGLWidget):
             return False
 
     def deleteAllImages(self):
-       self.images.clear()
-
+        self.images.clear()
+        
+    def deleteAllText(self):
+        del self.texts[:]
         
     def deleteImage(self, image):
         '''
