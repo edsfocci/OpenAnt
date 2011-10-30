@@ -22,7 +22,7 @@ class Tile:
     def __init__(self, type):
         self.type = type
         self.items=[]
-        self.ants =[]
+        self.ants =[]   #not currently used
         self.scents=[]
        
     def addItem(self,i):
@@ -38,7 +38,7 @@ class Tile:
         
     def containsItem(self,i):
         if self.items:
-            try:#if the index() raises a exception, then the item isn't in the list
+            try:
                 self.items.index(i) 
                 return True
             except: 
@@ -70,12 +70,6 @@ class Tile:
                 if s.strength > 0:
                     s.setStrength(SCENT_MAX_STRENGTH)
                 
-    def increaseScent(self,type,strength):
-         for s in self.scents:
-            if s.type == type:
-                s.strength+=strength
-                if s.strength > SCENT_MAX_STRENGTH:
-                    s.strength = SCENT_MAX_STRENGTH
                 
     def isPassable(self):
         if self.type == TileType.Rock:

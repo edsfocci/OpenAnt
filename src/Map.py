@@ -40,7 +40,6 @@ class Map:
             myList = []
             for j in range(Globals.mapHeight):
                 myList.append(Tile(TileType.Void))
-                myList[-1].setCoordinates(i,j)
             self.tiles.append(myList)
             
     #2. set tile type and content
