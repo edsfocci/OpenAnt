@@ -37,29 +37,40 @@ class TEMP:
         self.lastY = -1
 
         
-    def getCoords(self, button, x, y):
+    def getCoords(self, button, pixelX, pixelY):
         '''
         On click, move ant.
         '''
-        x = (x/Globals.pixelSize)#*Globals.pixelSize
-        y = (y/Globals.pixelSize)#*Globals.pixelSize
-         
-        if button == 1:
+        if Globals.underground:
+            x = 0
+            y = (pixelX/Globals.pixelSize)
+            z = (pixelY/Globals.pixelSize) + 1 # First row of underground tiles have index 1, not 0 !
+        else:
+            x = (pixelX/Globals.pixelSize)#*Globals.pixelSize
+            y = (pixelY/Globals.pixelSize)#*Globals.pixelSize
+            z = 0
+        c = Coord((x,y,z))
         
-            if self.lastButton == button and time()-self.lastClick < 0.5 and x == self.lastX and y == self.lastY:   #double click
-                self.g.doubleClick((x,y))
+        if not 0 <= x < Globals.mapWidth or not 0 <= y < Globals.mapHeight:   
+            return
+        
+        if button == 1:
+            if self.lastButton == button and time()-self.lastClick < 0.5 and x == self.lastX and y == self.lastY and z == self.lastZ:   #double click
+                self.g.doubleClick(c)
             else:
-                self.g.moveAnt((x,y))
+                self.g.singleClick(c)
+        if button == 2:
+                self.g.rightClick(c)
             #else:
             #    # Choose a tile that is passable and next to the tile clicked on.
             #    while not self.tiles[x/32][y/32].isPassable():
-            #        if self.yellowAnt.pos[0] < x:
+            #        if self.yellowAnt.getPos[0] < x:
             #            x -= 32
-            #        elif self.yellowAnt.pos[0] > x:
+            #        elif self.yellowAnt.getPos[0] > x:
             #            x += 32
-            #        if self.yellowAnt.pos[1] < y:
+            #        if self.yellowAnt.getPos[1] < y:
             #            y -= 32
-            #        elif self.yellowAnt.pos[1] > y:
+            #        elif self.yellowAnt.getPos[1] > y:
             #            y += 32
             #    self.yellowAnt.newPos = [x, y]
             #    if self.yellowAnt.moveAlongPath in self.yellowAnt.queue: #User decided to perform a different action sequence
@@ -69,6 +80,7 @@ class TEMP:
             #    self.yellowAnt.queue.append(self.yellowAnt.findPath)
         self.lastX = x
         self.lastY = y
+        self.lastZ = z
        
         self.lastButton = button
         self.lastClick = time()

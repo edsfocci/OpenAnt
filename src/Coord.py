@@ -15,20 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
 
-class Items:
-    Void,Food,Pebble = range(3)
-    
-class TileType:
-    Ground,Rock,Wall,Nest,Empty,Void,Earth = range(7) 
-    
-class Ants:
-    Yellow = range(1)
+import Globals
+from const.constants import *
+from Enums import *
 
-class Actions:
-    Idle,Move,GrabItem,DropItem,Eat,DigThrough = range(6)
-
-class Scents:
-    Alarm,Trail,Nest = range(3)
+class Coord(object):
+    def __init__(self,(x,y,z)):
+        self.x = x
+        self.y = y
+        self.z = z
+        pass
+        
+    def __eq__(self,c):
+        return (self.x == c.x and self.y == c.y and self.z == c.z )
+            
     
-class Teams:
-    Red,Blue = range(2)
+    def __ne__(self,c):
+        return not (self.x == c.x and self.y == c.y and self.z == c.z )
+    def pr(self):
+        print self.x
+        print self.y
+        print self.z
+        print ""

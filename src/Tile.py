@@ -17,9 +17,12 @@
 
 from Scent import *
 from Enums import *
+from Coord import *
 class Tile:
  
     def __init__(self, type):
+        self.outside = Coord((0,0,0)) #coordinate of the nest entrance if tile is nest
+        self.inside  = Coord((0,0,0)) #coordinate of the nest exit if tile is nest
         self.type = type
         self.items=[]
         self.ants =[]   #not currently used
@@ -72,7 +75,7 @@ class Tile:
                 
                 
     def isPassable(self):
-        if self.type == TileType.Rock:
+        if self.type == TileType.Rock or self.type == TileType.Earth :
             return False;
         else:
             return True;

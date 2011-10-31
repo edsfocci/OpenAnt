@@ -30,4 +30,23 @@ class Debug:
                     sys.stdout.write("F") 
             sys.stdout.write("\n")
             
-            
+    def enterNest(self):
+        print "Enter Nest2"
+        
+        Globals.underground = True
+        #Globals.glwidget.camera[0] =0
+        #Globals.glwidget.camera[1] = 0
+        #Globals.upBound = Globals.blackNestY
+        #Globals.downBound *= 2
+        #Globals.leftBound = Globals.blackNestX
+        #Globals.rightBound = Globals.redNestX
+
+        
+        #self.direction = self.S
+        #self.sprite.setTextureRect(self.direction) # Update sprite direction.
+        #self.getPos = list(self.getPos)
+        #self.getPos[0] = abs(Globals.blackNestX)
+        #self.getPos[1] = abs(Globals.blackNestY)
+        #self.sprite.setDrawRect([self.getPos[0], self.getPos[1], 32, 32])
+        # 
+        # self.queue.popleft()

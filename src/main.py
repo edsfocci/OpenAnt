@@ -49,7 +49,7 @@ class OpenAnt(QApplication):
         #Start the game
         self.g = Game()
         self.t = TEMP(self.g)
-        self.view = View(self.g.map.getTiles())
+        self.view = View(self.g.map)
         # Start the main loop.
         self.gameLoop()
     

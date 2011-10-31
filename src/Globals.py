@@ -24,7 +24,10 @@ dataDir = "../data/"
 pixelSize  = 32    #Size of tiles' side
 mapHeight = 32
 mapWidth  = 32
-
+undergroundHeight = 32
+undergroundWidth  = mapHeight
+underground = False
+undergroundChunk = 5
 gameIsRunning = False
 
 #nest camera coordinates

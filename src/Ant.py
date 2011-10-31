@@ -22,7 +22,7 @@ class Ant(Creature):
         pass
     
     def performAction(self):
-        if (self.positionX,self.positionY) != (self.destinationX,self.destinationY):
+        if (self.getPos()) != (self.getDest()):
             self.move()
         else:
             if self.action == Actions.GrabItem:    
@@ -33,25 +33,31 @@ class Ant(Creature):
                 self.dropItem()
             elif self.action == Actions.Eat:
                 self.eat()
+            elif self.action == Actions.Move:
+                if self.map.getTileType(self.getPos()) == TileType.Nest:
+                    self.goThroughNest()
             self.action = Actions.Idle
     
     def grabItem(self):
         self.action = Actions.Idle
         if self.item == Items.Void:
-            self.item = self.map.takeItem(self.pos())
+            self.item = self.map.takeItem(self.getPos())
             
     def dropItem(self):
-        print self.item
         self.action = Actions.Idle
         if self.item != Items.Void:
-           self.map.putItem(self.pos(),self.item)
+           self.map.putItem(self.getPos(),self.item)
            self.item = Items.Void
-        print self.item
         
     def eat(self):
         if(self.item == Items.Food):
             self.item = Items.Void
             self.hp = 100
             
+    def goThroughNest(self):
+        self.underground = not self.underground
+        map.goThroughNest(self)
+        self.dest = self.pos 
+    
         
  
