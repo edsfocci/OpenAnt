@@ -16,16 +16,20 @@
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
 
 from Creature import *
-
+from algo.astar import *
+import collections
 class Ant(Creature):
     def __init__(self):
         pass
     
     def performAction(self):
-        if (self.getPos()) != (self.getDest()):
-            self.move()
-        else:
-            if self.action == Actions.GrabItem:    
+            if self.action == Actions.Move:
+                if self.map.getTileType(self.getPos()) == TileType.Nest:
+                    self.goThroughNest()
+                else:
+                    self.move()
+                    return
+            elif self.action == Actions.GrabItem:    
                 self.grabItem()
                 if(self.hp<30):
                     self.eat()
@@ -33,11 +37,14 @@ class Ant(Creature):
                 self.dropItem()
             elif self.action == Actions.Eat:
                 self.eat()
-            elif self.action == Actions.Move:
-                if self.map.getTileType(self.getPos()) == TileType.Nest:
-                    self.goThroughNest()
+            elif self.action == Actions.Dig:
+                self.dig()
+                return
+                
             self.action = Actions.Idle
-    
+    def dig(self):
+        pass
+        
     def grabItem(self):
         self.action = Actions.Idle
         if self.item == Items.Void:
@@ -55,9 +62,10 @@ class Ant(Creature):
             self.hp = 100
             
     def goThroughNest(self):
-        self.underground = not self.underground
-        map.goThroughNest(self)
+        self.map.goThroughNest(self)
         self.dest = self.pos 
     
+    def move(self):
+        pass
         
  

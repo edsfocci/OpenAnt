@@ -61,31 +61,12 @@ class TEMP:
                 self.g.singleClick(c)
         if button == 2:
                 self.g.rightClick(c)
-            #else:
-            #    # Choose a tile that is passable and next to the tile clicked on.
-            #    while not self.tiles[x/32][y/32].isPassable():
-            #        if self.yellowAnt.getPos[0] < x:
-            #            x -= 32
-            #        elif self.yellowAnt.getPos[0] > x:
-            #            x += 32
-            #        if self.yellowAnt.getPos[1] < y:
-            #            y -= 32
-            #        elif self.yellowAnt.getPos[1] > y:
-            #            y += 32
-            #    self.yellowAnt.newPos = [x, y]
-            #    if self.yellowAnt.moveAlongPath in self.yellowAnt.queue: #User decided to perform a different action sequence
-            #        print 'remove queue'
-            #        self.yellowAnt.queue.clear() #Clear queued actions
-            #        self.yellowAnt.path.clear() #Clear path so ant can move to new location
-            #    self.yellowAnt.queue.append(self.yellowAnt.findPath)
         self.lastX = x
         self.lastY = y
         self.lastZ = z
        
         self.lastButton = button
         self.lastClick = time()
-        #print self.g.getYellowAnt().positionX
-        #print self.g.getYellowAnt().positionY
         
     def moveCamera(self,x,y):
         try: # We try and cancel any previous camera movements.

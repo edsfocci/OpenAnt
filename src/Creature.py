@@ -18,11 +18,9 @@
 #DEBUG
 
 import Globals
-from algo.astar import *
 from Map import *
 from Enums import *
 from Coord import *
-import collections
 class Creature():
         
     hp = 100
@@ -34,13 +32,12 @@ class Creature():
     map     = Map() #find a better way to link each creatures to the game map
     def __init__(self):
         pass
+    
+    def isUnderground(self):
+        return self.pos.z > 0
         
     def setPosition(self,cPos):  
         self.pos = Coord(cPos)  #cPos is interpreted as tuple here otherwise. Weird :/
-        self.dst = self.pos 
-        
-        if self.pos.y == 0:
-            self.underground = True
         
     def getPos(self):
         return self.pos
@@ -61,21 +58,9 @@ class Creature():
     def setDestination(self,cDst):
         self.dst = cDst
     
-    def move(self):
-        self.map.generateAStarMap(self.pos,self.dst)   #generate the AStar map for every move. Not an optimal solution if you ask me. Should be changed to a AStarMap buffer to which the start and target tiles are set for each creature. This would also make the generateAStarMap funciton cleaner
-        a = AStar(self.map.AStarMap, MANHATTAN)
-        q = collections.deque()
-        a.step(q)
-        if a.path and self.map.tiles[a.path[1][0]][a.path[1][1]].isPassable():  #Move unit
-            self.pos.x = a.path[1][0]
-            self.pos.y = a.path[1][1]
-            
-        if len(a.path) == 2 and not self.map.tiles[a.path[1][0]][a.path[1][1]].isPassable():    #if the dest tile is not passable and len(a.path)==2 then we are on the adjacent tile of the unpassable target -> movement done
-            self.dst.x = self.pos.x 
-            self.dst.y = self.pos.y
-            
-            
-            
+    def move(self):              # Abstract method, defined by convention only
+        raise NotImplementedError("Subclass must implement abstract method")
+    
             
             
             

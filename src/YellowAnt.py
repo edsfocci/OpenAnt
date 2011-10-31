@@ -14,31 +14,33 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
-import os
 from Ant import *
 from Creature import *
 
 class YellowAnt(Ant,Creature):
     def __init__(self):
-        self.markAlarmScent = True
+        self.markAlarmScent = False
         pass
         
-    def buildNest(self):
-        self.map.buildNest(self.getPos())
+    def dig(self):
+        if(abs(self.dst.z - self.pos.z)>abs((self.dst.y - self.pos.y))):
+            if (self.dst.z - self.pos.z) < 0:
+                    self.pos.z-=1
+            elif (self.dst.z - self.pos.z) > 0:
+                    self.pos.z+=1
+        else:
+            if (self.dst.y - self.pos.y) < 0:
+                self.pos.y-=1
+            elif (self.dst.y - self.pos.y) > 0:
+                self.pos.y+=1
+        self.map.digTile(self.getPos())
         
     def move(self):
-        #TODO: change dig through method so there's no diagonal displacement
-        if self.underground and self.action == Actions.DigThrough:
-                if (self.dst.z - self.pos.z) < 0:
-                    self.pos.z-=1
-                elif (self.dst.z - self.pos.z) > 0:
-                    self.pos.z+=1
-                    
-                if (self.dst.y - self.pos.y) < 0:
-                    self.pos.y-=1
-                elif (self.dst.y - self.pos.y) > 0:
-                    self.pos.y+=1
-                self.map.digTile(self.getPos())
+        if self.pos == self.dst:
+            self.action = Actions.Idle
+            return
+        if self.pos.z>0 and self.action == Actions.Dig:
+            self.dig()
         else:         
             self.map.generateAStarMap(self.getPos(),self.getDest())  
             a = AStar(self.map.AStarMap, MANHATTAN)
@@ -49,7 +51,7 @@ class YellowAnt(Ant,Creature):
                 print a.path
                 nextX = a.path[1][0]
                 nextY = a.path[1][1]
-                if self.underground :
+                if self.isUnderground()  :
                     if self.map.blueUnderground[nextX][nextY-1].isPassable():
                         self.pos.y = nextX
                         self.pos.z = nextY
@@ -62,5 +64,7 @@ class YellowAnt(Ant,Creature):
     def goThroughNest(self):
         self.map.goThroughNest(self)
         self.dst = self.pos
-        Globals.underground = self.underground
-        print Globals.underground
+        if self.pos.z == 0:
+            Globals.underground = False
+        else:
+            Globals.underground = True

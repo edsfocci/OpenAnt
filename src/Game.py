@@ -65,13 +65,13 @@ class Game:
             #move and perform action for each creature
             c.performAction()
             if isinstance(c,YellowAnt): 
-                if c.item == Items.Food:
+                if c.item == Items.Food and c.pos.z == 0 :
                     self.map.refreshScentYellow(c.getPos(),Scents.Trail)
-                if c.markAlarmScent == True:
+                if c.markAlarmScent == True and c.pos.z == 0:
                     self.map.refreshScentYellow(c.getPos(),Scents.Alarm)
             else:
                 #refresh or create new scents
-                if c.item == Items.Food:
+                if c.item == Items.Food and c.pos.z == 0:
                     self.map.refreshScent(c.getPos(),Scents.Trail)
             
     def singleClick(self,c):   
@@ -82,8 +82,8 @@ class Game:
             self.getYellowAnt().setAction(c,Actions.BuildNest)
         
     def doubleClick(self,c):
-        if self.getYellowAnt().underground:
-            self.getYellowAnt().setAction(c,Actions.DigThrough)
+        if self.getYellowAnt().isUnderground():
+            self.getYellowAnt().setAction(c,Actions.Dig)
         elif  self.map.tiles[c.x][c.y].isEmpty():   #could be changed to interface function map.isTileEmpty((x,y))
             self.getYellowAnt().setAction(c,Actions.DropItem)
         else:

@@ -33,11 +33,11 @@ class View():
         image = Globals.dataDir + 'images/ants/' + 'yellowant.png'
         if Globals.underground:
             for unit in unitList:
-                if unit.underground :
+                if unit.pos.z>0 :
                     Globals.glwidget.createImage(image , 2,[0, 32, 32, 32], [unit.pos.y*Globals.pixelSize, (unit.pos.z - 1)*Globals.pixelSize, 32, 32])
         else:
             for unit in unitList:
-                if not unit.underground:
+                if unit.pos.z == 0:
                     Globals.glwidget.createImage(image , 2,[0, 32, 32, 32], [unit.pos.x*Globals.pixelSize, unit.pos.y*Globals.pixelSize, 32, 32])
     def drawMap(self):
 

@@ -32,6 +32,7 @@ class Coord(object):
     
     def __ne__(self,c):
         return not (self.x == c.x and self.y == c.y and self.z == c.z )
+        
     def pr(self):
         print self.x
         print self.y

@@ -25,7 +25,7 @@ class Ants:
     Yellow = range(1)
 
 class Actions:
-    Idle,Move,GrabItem,DropItem,Eat,DigThrough = range(6)
+    Idle,Move,GrabItem,DropItem,Eat,Dig = range(6)
 
 class Scents:
     Alarm,Trail,Nest = range(3)

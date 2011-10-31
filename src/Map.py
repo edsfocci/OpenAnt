@@ -22,7 +22,6 @@ from random import *
 from View import *
 from Tile import *
 from Scent import *
-from Underground import *
 from Coord import *
 class Map:
 
@@ -74,7 +73,7 @@ class Map:
         
     #4. Put nest main entrance at random point
         
-        cOut = Coord((randint(0,Globals.mapWidth),randint(0,Globals.mapHeight),0))
+        cOut = Coord((randint(0,Globals.mapWidth-1),randint(0,Globals.mapHeight-1),0))
         cIn  = Coord((0,randint(0,Globals.undergroundWidth - 1),0))
         
         del self.tiles[cOut.x][cOut.y].items[:]
@@ -90,13 +89,12 @@ class Map:
         if ant.pos.z != 0:
             tile = self.blueUnderground[ant.pos.y][ant.pos.z-1]
             ant.pos = tile.outside
-            ant.underground = False
+            ant.pos.y += 1 #prevents the ant from coming back right in. Same behavior as in original game ! :P
         else:
             tile = self.tiles[ant.pos.x][ant.pos.y]
-            ant.underground = True
             ant.pos = tile.inside
-            ant.pos.z = 1
-            
+            ant.pos.z = 2
+           
             
     def buildNest(self,c):
             ug = self.blueUnderground
@@ -253,7 +251,7 @@ class Map:
             height = Globals.undergroundHeight
             start = cSrc.y ,cSrc.z-1 
             dest  = cDst.y ,cDst.z-1 
-            for x in range(width):      #when underground,m 1 line of blocked tiles is added to avoid problems, as row 0 of underground tiles have index 0 in the list but coordinate Z = 1
+            for x in range(width):      #when underground, 1 line of blocked tiles is added to avoid problems, as row 0 of underground tiles have index 0 in the list but coordinate Z = 1
                 self.AStarMap+=BLOCKED
             self.AStarMap += "\n"
         else:
