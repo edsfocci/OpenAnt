@@ -41,21 +41,15 @@ class TEMP:
         '''
         On click, move ant.
         '''
-        if Globals.underground:
-            x = 0
-            y = (pixelX/Globals.pixelSize)
-            z = (pixelY/Globals.pixelSize) + 1 # First row of underground tiles have index 1, not 0 !
-        else:
-            x = (pixelX/Globals.pixelSize)#*Globals.pixelSize
-            y = (pixelY/Globals.pixelSize)#*Globals.pixelSize
-            z = 0
-        c = Coord((x,y,z))
-        
+
+        x = (pixelX/Globals.pixelSize)
+        y = (pixelY/Globals.pixelSize)
+        c = Coord((x,y))
         if not 0 <= x < Globals.mapWidth or not 0 <= y < Globals.mapHeight:   
             return
         
         if button == 1:
-            if self.lastButton == button and time()-self.lastClick < 0.5 and x == self.lastX and y == self.lastY and z == self.lastZ:   #double click
+            if self.lastButton == button and time()-self.lastClick < 0.5 and x == self.lastX and y == self.lastY:   #double click
                 self.g.doubleClick(c)
             else:
                 self.g.singleClick(c)
@@ -63,7 +57,6 @@ class TEMP:
                 self.g.rightClick(c)
         self.lastX = x
         self.lastY = y
-        self.lastZ = z
        
         self.lastButton = button
         self.lastClick = time()

@@ -25,10 +25,13 @@ class Ants:
     Yellow = range(1)
 
 class Actions:
-    Idle,Move,GrabItem,DropItem,Eat,Dig = range(6)
+    Idle,Move,GrabItem,DropItem,Eat,Dig,GoThroughNest = range(7)
 
 class Scents:
     Alarm,Trail,Nest = range(3)
     
 class Teams:
-    Red,Blue = range(2)
+    Red,Blue,Crit = range(3)
+
+class PlayerType:
+    Human,Computer = range(2)

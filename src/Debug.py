@@ -31,8 +31,7 @@ class Debug:
             sys.stdout.write("\n")
             
     def enterNest(self):
-        print "Enter Nest2"
-        
+        pass
         Globals.underground = True
         #Globals.glwidget.camera[0] =0
         #Globals.glwidget.camera[1] = 0

@@ -19,8 +19,11 @@ Nest Scent indicates the proximity of a friendly or unfriendly nest. It doesn't 
 Scent has different degrees of strength. The strenth increases when an ant leaving scent walk over a tile. [IMPLEMENTED]    [TESTED]
 Scent slowly propagates to nearby tiles. The Scent depletes over time, after it hasn't been walked over by an ant for a certain time. [IMPLEMENTED]    [TESTED]
 There can be different scent on one tile. [IMPLEMENTED]    [TESTED]
+
 Milestone 2 : Undergound    
-*tbd*
+Ants can dig through [Implemented][Tested]
+Yellow when yellow ant dig at top row, a nest entry appears at random place at the surface [implemented] [TESTED]
+Black ants can't dig top row [NOT IMPLEMENTED]
 Milestone 3 : Populate
 *tbd*
 Milestone 4 : AI          

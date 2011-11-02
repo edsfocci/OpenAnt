@@ -23,95 +23,89 @@ from Debug import *
 from Ant import *
 from YellowAnt import *
 from Coord import *
+from Team import *
+from Patch import *
 class Game:
     
     
     def __init__(self):
-        self.map = Map()
-        self.map.generateMap()
+        self.patch = Patch()
         self.creatureList = []
-        self.spawnAnt((5,5,0),Ants.Yellow)
-        self.d = Debug()
+        #actually the patch class should contain the teams
+        self.teams = []
+        self.teams.append(Team(Teams.Blue))
+        self.teams.append(Team(Teams.Red))
+
+        self.teams[0].addCreature(self.spawnCreature((5,5),Ants.Yellow,Teams.Blue))
+        self.teams[0].playerType = PlayerType.Human
+
+        self.teams[1].addCreature(self.spawnCreature((7,7),Ants.Yellow,Teams.Red))
+        self.teams[1].playerType = PlayerType.Computer
         Globals.underground = False
-        #self.d.enterNest()
         
-        
-    def getMap(self):
-        return self.map
+    def getPatch(self):
+        return self.patch
     
     def getCreatureList(self):
         return self.creatureList
     
-    def getSpawnLocation(self):
-        c = Coord()
-        c.x = randint(0, 10)
-        c.y = randint(0, 10)
-        c.z = 0
-        while not self.tiles[c.x][c.y].isPassable() and not self.tiles[c.x][c.y].isEmpty() :
-            c.x = randint(0, 10)
-            c.y = randint(0, 10)
-        return c
-    
-    def getYellowAnt(self):
-        for a in self.creatureList:
-            if  isinstance(a,YellowAnt):
-                return a
-        return -1
-        
+   #Not used -> to be deleted ?
+   # def getSpawnLocation(self):
+   #     c = Coord()
+   #     c.x = randint(0, 10)
+   #     c.y = randint(0, 10)
+   #     while not self.tiles[c.x][c.y].isPassable() and not self.tiles[c.x][c.y].isEmpty() :
+   #         c.x = randint(0, 10)
+   #         c.y = randint(0, 10)
+   #     return c
+   # 
+
     def update(self):
         #update existing scents
-        self.map.updateScents()
+        self.patch.above.updateScents()
+        self.teams[1].makeDecisions()
         for c in self.creatureList: 
+            if c.map.getTileType(c.getPos()) == TileType.Nest and c.action == Actions.GoThroughNest:
+                self.patch.goThroughNest(c)
             #move and perform action for each creature
             c.performAction()
             if isinstance(c,YellowAnt): 
-                if c.item == Items.Food and c.pos.z == 0 :
-                    self.map.refreshScentYellow(c.getPos(),Scents.Trail)
-                if c.markAlarmScent == True and c.pos.z == 0:
-                    self.map.refreshScentYellow(c.getPos(),Scents.Alarm)
+                if c.item == Items.Food:
+                    self.patch.above.refreshScentYellow(c.getPos(),Scents.Trail)
+                if c.markAlarmScent == True:
+                    self.patch.above.refreshScentYellow(c.getPos(),Scents.Alarm)
             else:
                 #refresh or create new scents
-                if c.item == Items.Food and c.pos.z == 0:
-                    self.map.refreshScent(c.getPos(),Scents.Trail)
+                if c.item == Items.Food:
+                    self.patch.above.refreshScent(c.getPos(),Scents.Trail)
             
     def singleClick(self,c):   
-        self.moveAnt(c)
+        self.teams[0].moveYellowAnt(c)
         
     def rightClick(self,c):
-        if self.getYellowAnt().pos.z == 1:
-            self.getYellowAnt().setAction(c,Actions.BuildNest)
-        
+        pass
+
     def doubleClick(self,c):
-        if self.getYellowAnt().isUnderground():
-            self.getYellowAnt().setAction(c,Actions.Dig)
-        elif  self.map.tiles[c.x][c.y].isEmpty():   #could be changed to interface function map.isTileEmpty((x,y))
-            self.getYellowAnt().setAction(c,Actions.DropItem)
-        else:
-            self.getYellowAnt().setAction(c,Actions.GrabItem)
-            
+        self.teams[0].doubleClick(c)
+
     def spawnFoodAtRandom(self):        
         c.x = randint(0, Globals.mapWidth  - 1)
         c.y = randint(0, Globals.mapHeight - 1)
-        c.z = 0
         self.spawnFood(c)
     
-    def setAction(self,c,action):
-        self.getYellowAnt().setAction(c,action)
-        
-    def moveAnt(self,c):
-        self.getYellowAnt().setAction(c,Actions.Move)   
-        
     def spawnFood(self,c):        
-        self.map.putItem(c,Items.Food);
+        self.patch.above.putItem(c,Items.Food);
 
-    def spawnAnt(self,c,antType):
-        if antType == Ants.Yellow:
-            a = YellowAnt()
+    def spawnCreature(self,coord,creature,team):
+        
+        if creature == Ants.Yellow:
+            a = YellowAnt(team)
         else:
-            a = Ant()
-        a.map = self.map
-        a.setPosition(c)
+            a = Ant(team)
+        a.map = self.patch.above
+        a.setPosition(coord)
         self.creatureList.append(a)
+        return a
 
         
         

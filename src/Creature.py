@@ -9,7 +9,7 @@
 #
 # Open Ant is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PUR__posE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
@@ -21,42 +21,45 @@ import Globals
 from Map import *
 from Enums import *
 from Coord import *
+from Underground import *
 class Creature():
         
-    hp = 100
-    pos = Coord((0,0,0))
-    dst = Coord((0,0,0))
-    underground = False
-    action  = Actions.Idle
-    item    = Items.Void
-    map     = Map() #find a better way to link each creatures to the game map
-    def __init__(self):
+
+    def __init__(self,team):
+        self.pos = Coord((0,0))
+        self.team = team
+        self.hp = 100
+        self.dst = Coord((0,0))
+        self.underground = False
+        self.action  = Actions.Idle
+        self.item    = Items.Void
+        self.map     = None #find a better way to link each creatures to the game map
         pass
     
     def isUnderground(self):
-        return self.pos.z > 0
+        return isinstance(self.map, Underground)
         
     def setPosition(self,cPos):  
-        self.pos = Coord(cPos)  #cPos is interpreted as tuple here otherwise. Weird :/
-        
+        self.pos.set(Coord(cPos))
+
     def getPos(self):
         return self.pos
     
-    def getDest(self):
+    def getDst(self):
         return self.dst
 
     def setAction(self,cDst,action):
         self.action = action
-        self.dst = cDst
+        self.dst.set(cDst)
 
     def performAction(self):
-        if (self.pos) != (self.dst):
+        if self.pos != self.dst:
             self.move()
         else:
             pass
             
     def setDestination(self,cDst):
-        self.dst = cDst
+        self.dst.set(cDst)
     
     def move(self):              # Abstract method, defined by convention only
         raise NotImplementedError("Subclass must implement abstract method")

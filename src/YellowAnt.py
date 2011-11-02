@@ -18,53 +18,43 @@ from Ant import *
 from Creature import *
 
 class YellowAnt(Ant,Creature):
-    def __init__(self):
-        self.markAlarmScent = False
-        pass
+   
+    markAlarmScent = False
+   
+    #def __init__(self):
+    #    pass
         
     def dig(self):
-        if(abs(self.dst.z - self.pos.z)>abs((self.dst.y - self.pos.y))):
-            if (self.dst.z - self.pos.z) < 0:
-                    self.pos.z-=1
-            elif (self.dst.z - self.pos.z) > 0:
-                    self.pos.z+=1
-        else:
+        if(abs(self.dst.y - self.pos.y)>abs((self.dst.x - self.pos.x))):
             if (self.dst.y - self.pos.y) < 0:
-                self.pos.y-=1
+                    self.pos.y-=1
             elif (self.dst.y - self.pos.y) > 0:
-                self.pos.y+=1
+                    self.pos.y+=1
+        else:
+            if (self.dst.x - self.pos.x) < 0:
+                self.pos.x-=1
+            elif (self.dst.x - self.pos.x) > 0:
+                self.pos.x+=1
         self.map.digTile(self.getPos())
         
     def move(self):
         if self.pos == self.dst:
-            self.action = Actions.Idle
+            if self.map.getTileType(self.pos)==TileType.Nest:
+                self.action = Actions.GoThroughNest
+            else:
+                self.action = Actions.Idle
             return
-        if self.pos.z>0 and self.action == Actions.Dig:
+        if self.isUnderground() and self.action == Actions.Dig:
             self.dig()
         else:         
-            self.map.generateAStarMap(self.getPos(),self.getDest())  
+            self.map.generateAStarMap(self.getPos(),self.getDst())  
             a = AStar(self.map.AStarMap, MANHATTAN)
             q = collections.deque()
             
             a.step(q)
             if a.path:
-                print a.path
                 nextX = a.path[1][0]
                 nextY = a.path[1][1]
-                if self.isUnderground()  :
-                    if self.map.blueUnderground[nextX][nextY-1].isPassable():
-                        self.pos.y = nextX
-                        self.pos.z = nextY
-                else:
-                    if self.map.tiles[nextX][nextY].isPassable():  
-                        self.pos.x = nextX
-                        self.pos.y = nextY
-                    
-            
-    def goThroughNest(self):
-        self.map.goThroughNest(self)
-        self.dst = self.pos
-        if self.pos.z == 0:
-            Globals.underground = False
-        else:
-            Globals.underground = True
+                if self.map.tiles[nextX][nextY].isPassable():  
+                    self.pos.x = nextX
+                    self.pos.y = nextY

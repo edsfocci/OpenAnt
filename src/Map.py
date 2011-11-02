@@ -19,105 +19,18 @@ import Globals
 from const.constants import *
 from Enums import *
 from random import *
-from View import *
 from Tile import *
 from Scent import *
 from Coord import *
-class Map:
+import numpy
+class Map():
 
     
    
     AStarMap = ""    #map of passable/not passable tiles.
     def __init__(self):
-        self.tiles = []            #the actual map
-        self.scentTiles = []       #List of tiles containing scent
-        self.blueUnderground = []
-        
-        
-    def generateMap(self):
-    
-    #1. Create tiles list
-        for i in range(Globals.mapWidth):
-            myList = []
-            for j in range(Globals.mapHeight):
-                myList.append(Tile(TileType.Void))
-            self.tiles.append(myList)
-            
-    #2. set tile type and content
-        for x in range(Globals.mapWidth):
-            for y in range(Globals.mapHeight):
-                if randint(0,10) >= 1:
-                    self.tiles[x][y].type = TileType.Ground;
-                    if randint(0,10) > 9:
-                        self.tiles[x][y].items.append(Items.Pebble)
-                else:
-                    self.tiles[x][y].type = TileType.Rock;
-                    
-    #3. Put some food in there
-        for i in range(50):
-            c = self.getSpawnLocationDistribution()
-            self.putItem(c,Items.Food)
-    #3. Generate underground
-        #1. Create tiles list
-        for i in range(Globals.undergroundWidth):
-            myList = []
-            for j in range(Globals.undergroundHeight):
-                myList.append(Tile(TileType.Void))
-            self.blueUnderground.append(myList)
-            
-        #2. set tile type and content
-        for y in range(Globals.mapWidth):
-            for z in range(Globals.mapHeight):
-                self.blueUnderground[y][z].type = TileType.Earth;
+        self.tiles=[]
 
-        
-    #4. Put nest main entrance at random point
-        
-        cOut = Coord((randint(0,Globals.mapWidth-1),randint(0,Globals.mapHeight-1),0))
-        cIn  = Coord((0,randint(0,Globals.undergroundWidth - 1),0))
-        
-        del self.tiles[cOut.x][cOut.y].items[:]
-        self.tiles[cOut.x][cOut.y].type = TileType.Nest
-        self.tiles[cOut.x][cOut.y].inside  = cIn    
-        
-        self.blueUnderground[cIn.y][cIn.z].outside = cOut
-        self.blueUnderground[cIn.y][cIn.z].type  = TileType.Nest
-        self.blueUnderground[cIn.y][cIn.z+1].type  = TileType.Empty 
-        
-    
-    def goThroughNest(self,ant):
-        if ant.pos.z != 0:
-            tile = self.blueUnderground[ant.pos.y][ant.pos.z-1]
-            ant.pos = tile.outside
-            ant.pos.y += 1 #prevents the ant from coming back right in. Same behavior as in original game ! :P
-        else:
-            tile = self.tiles[ant.pos.x][ant.pos.y]
-            ant.pos = tile.inside
-            ant.pos.z = 2
-           
-            
-    def buildNest(self,c):
-            ug = self.blueUnderground
-            while True:
-                cNestExit = Coord((randint(0,Globals.mapWidth-1),randint(0,Globals.mapHeight-1),0))
-                if self.tiles[cNestExit.x][cNestExit.y].type != TileType.Nest:
-                    break
-            
-            ug[c.y][c.z-1].type = TileType.Nest #indoor nest
-            ug[c.y][c.z-1].outside = cNestExit
-            
-            del self.tiles[cNestExit.x][cNestExit.y].items[:]
-            self.tiles[cNestExit.x][cNestExit.y].type = TileType.Nest #indoor nest
-            self.tiles[cNestExit.x][cNestExit.y].inside = c
-            
-            
-    def digTile(self,c):
-        if self.blueUnderground[c.y][c.z-1].type == TileType.Earth:
-            if c.z == 1:
-                self.buildNest(c)
-            else:
-                self.blueUnderground[c.y][c.z-1].type = TileType.Empty
-        
     def getSpawnLocationDistribution(self, distCenter = (10, 10)):
         '''Used for food spawning''' 
         
@@ -133,7 +46,7 @@ class Map:
             if 0 < x < Globals.mapWidth and 0 < y < Globals.mapHeight:
                 if self.tiles[x][y].isPassable():
                     break
-        c = Coord((x,y,0))
+        c = Coord((x,y))
         return c
         
         
@@ -156,6 +69,7 @@ class Map:
             scent.init()
             self.tiles[x][y].scents.append(scent)
             self.scentTiles.append(self.tiles[x][y])
+
     #TODO: disable scents underground
     def updateScents(self):
         for tile in self.scentTiles:
@@ -182,61 +96,42 @@ class Map:
         if c.y-1>=0:
             self.refreshScent((c.x,c.y-1),Scents.Alarm)
             
-    
+    def getTileAt(self,coord):
+        return self.tiles[coord.x][coord.y]
     def getPos(self,tile):
     #iterating through each tile may be quicker because it doesnt raise exceptions
         c = Coord((0,0,0))
         for i,row in enumerate(self.tiles):
             try:
                 tileIndex = row.index(tile)
-                c.x = i
-                c.y = tileIndex
-                c.z = 0
+                c = self.tiles[tileIndex]
+                #c.y = tileIndex
+                #c.z = 
                 return c
             except: 
                 pass
         Exception('Tile not found in tiles[][]')
-        
-    def getTiles(self):
-        return self.tiles
-    
-    def getTile(self,c):
-        if c.z!=0 :
-            return self.blueUnderground[c.y][c.z-1]
-        else:
-            return self.tiles[c.x][c.y]
+ 
+           
+
     def getTileType(self,c):
-        if c.z != 0:
-            return self.blueUnderground[c.y][c.z-1].type
-        else:
             return self.tiles[c.x][c.y].type
         
      
         
     def takeItem(self,c):
         self.item = Items.Void
-        if c.z == 0:
-            if self.tiles[c.x][c.y].items:
-                self.item = self.tiles[c.x][c.y].removeItem()
-        else:
-            if self.undergrounds[c.x].tiles[c.y][c.z-1].items:
-                self.item = self.undergrounds[c.x].tiles[c.x][c.y].removeItem()
+        if self.tiles[c.x][c.y].items:
+            self.item = self.tiles[c.x][c.y].removeItem()
         return self.item
     
     def putItem(self,c,item):
-        if c.z == 0:
-            if self.tiles[c.x][c.y].isEmpty():
-                self.tiles[c.x][c.y].addItem(item)
-                return True
-            else:
-                return False
+        if self.tiles[c.x][c.y].isEmpty():
+            self.tiles[c.x][c.y].addItem(item)
+            return True
         else:
-            if self.undergrounds[c.x].tiles[c.y][c.z-1].isEmpty():
-                self.undergrounds[c.x].tiles[c.y][c.z-1].addItem(item)
-                return True
-            else:
-                return False
-            
+            return False
+
     def getAStarMap(self):
         if self.AStarMap == "":
             self.generateAStarMap()
@@ -245,21 +140,12 @@ class Map:
     def generateAStarMap(self,cSrc,cDst):
         AStarTiles = [] #reference to chunk of map that must be processed
         self.AStarMap = "" #clear map
-        if cSrc.z != 0: #underground
-            AStarTiles = self.blueUnderground
-            width  = Globals.undergroundWidth
-            height = Globals.undergroundHeight
-            start = cSrc.y ,cSrc.z-1 
-            dest  = cDst.y ,cDst.z-1 
-            for x in range(width):      #when underground, 1 line of blocked tiles is added to avoid problems, as row 0 of underground tiles have index 0 in the list but coordinate Z = 1
-                self.AStarMap+=BLOCKED
-            self.AStarMap += "\n"
-        else:
-            AStarTiles = self.tiles
-            width  = Globals.mapWidth
-            height = Globals.mapHeight
-            start = cSrc.x,cSrc.y
-            dest  = cDst.x ,cDst.y
+
+        AStarTiles = self.tiles
+        width  = Globals.mapWidth
+        height = Globals.mapHeight
+        start = cSrc.x,cSrc.y
+        dest  = cDst.x ,cDst.y
         
         for y in range(height):
             for x in range(width):

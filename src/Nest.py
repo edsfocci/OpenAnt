@@ -14,32 +14,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
+from Coord import *
+from Tile import *
+class Nest(Tile):
 
-import Globals
-from const.constants import *
-from Enums import *
+    #This class serves as inside and outside nest, it's no use creating 2 classes for each case
+    def init(self,underground= None):
+        self.underground = underground
+        self.outside = Coord((0,0)) #coordinate of the nest entrance if tile is nest
+        self.inside  = Coord((0,0)) #coordinate of the nest exit if tile is nest
+   
+       
 
-class Coord(object):
 
-    def __init__(self,(x,y)):
-        self.x = x
-        self.y = y
-
-    def set(self,cVal):
-        self.x = cVal.x
-        self.y = cVal.y
-
-    def rand(self):
-        self.x = randint(0,mapWidth)
-        self.y = randint(0,mapHeight)
-
-    def __eq__(self,c):
-        return (self.x == c.x and self.y == c.y )
-            
-    
-    def __ne__(self,c):
-        return not (self.x == c.x and self.y == c.y)
-    
-    def pr(self):
-        print self.x
-        print self.y

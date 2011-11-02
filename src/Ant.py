@@ -19,16 +19,12 @@ from Creature import *
 from algo.astar import *
 import collections
 class Ant(Creature):
-    def __init__(self):
-        pass
     
+        
     def performAction(self):
             if self.action == Actions.Move:
-                if self.map.getTileType(self.getPos()) == TileType.Nest:
-                    self.goThroughNest()
-                else:
-                    self.move()
-                    return
+                self.move()
+                return
             elif self.action == Actions.GrabItem:    
                 self.grabItem()
                 if(self.hp<30):
@@ -61,10 +57,8 @@ class Ant(Creature):
             self.item = Items.Void
             self.hp = 100
             
-    def goThroughNest(self):
-        self.map.goThroughNest(self)
-        self.dest = self.pos 
-    
+
+
     def move(self):
         pass
         

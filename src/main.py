@@ -49,7 +49,7 @@ class OpenAnt(QApplication):
         #Start the game
         self.g = Game()
         self.t = TEMP(self.g)
-        self.view = View(self.g.map)
+        self.view = View(self.g.patch.above)
         # Start the main loop.
         self.gameLoop()
     
@@ -73,12 +73,14 @@ class OpenAnt(QApplication):
         return self.game_timer.elapsed()
 
     def updateDisplay(self, interpolation):
+        self.view.updateMapReference(self.g.teams[0].getYellowAnt().map)
         self.view.updateVisuals(self.g.getCreatureList())
         Globals.glwidget.updateGL()
         self.processEvents() # Let Qt process its events.
 
     def updateGame(self):
         self.g.update()
+
         
 if __name__ == '__main__':
     OpenAnt()
