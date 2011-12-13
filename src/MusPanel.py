@@ -59,7 +59,7 @@ class MusPanel(QDockWidget):
         self.pause = QPushButton("Pause")
         self.shuffle = QCheckBox("Shuffle")
         
-        self.addFilesInDir(Globals.datadir + "music")
+        self.addFilesInDir(Globals.dataDir + "music")
         
         x = 0
         grid = QGridLayout()

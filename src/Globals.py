@@ -15,45 +15,32 @@
 # You should have received a copy of the GNU General Public License
 # along with Open Ant.  If not, see <http://www.gnu.org/licenses/>.
 
-#
-# This is where all the globals of Open Ant are stored
-#
-# By Oipo (kingoipo@gmail.com)
-
 #general
 vbos = False
-glwidget = None
+glWidget = None
 player = None
 overMap= None
-datadir = "../data/"
-pixelsize = 32
-mapheight = 32
-mapwidth = 64
-
-game_is_running = False
+dataDir = "../data/"
+pixelSize  = 32    #Size of tiles' side
+mapHeight = 32
+mapWidth  = 32
+undergroundHeight = 32
+undergroundWidth  = mapHeight
+underground = False
+undergroundChunk = 5
+gameIsRunning = False
 
 #nest camera coordinates
 blackNestX = 0
-blackNestY = -1 * pixelsize * (mapheight + 1)
-redNestX = -1 * pixelsize * (mapwidth * 0.5)
-redNestY = -1 * pixelsize * (mapheight + 1)
+blackNestY = -1 * pixelSize * (mapHeight + 1)
+redNestX = -1 * pixelSize * (mapWidth * 0.5)
+redNestY = -1 * pixelSize * (mapHeight + 1)
 
 #camera bounds
 leftBound = 0
-rightBound = -1 * mapwidth * pixelsize
+rightBound = -1 * mapWidth * pixelSize
 upBound = 0
-downBound = -1 * mapheight * pixelsize
-
-#gui
-#nothing here yet
+downBound = -1 * mapHeight * pixelSize
 
 #music
 mediaobject = None
-
-try:
-    import PyQt4.phonon
-    musicOn = True
-except ImportError as e:
-    musicOn = False
-    print "PyQt4 phonon not found, continuing without music."
-    

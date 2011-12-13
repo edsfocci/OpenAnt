@@ -11,7 +11,7 @@ from OpenGL.GL.ARB.vertex_buffer_object import *
 from OpenGL.GL.ARB.framebuffer_object import *
 from OpenGL.GL.ARB.texture_compression_rgtc import *
 from OpenGL.arrays import ArrayDatatype as ADT
-
+import Globals
 #Only set these when creating non-development code
 OpenGL.ERROR_CHECKING = False
 OpenGL.ERROR_LOGGING = False
@@ -389,6 +389,12 @@ class GLWidget(QGLWidget):
             glBindBuffer(GL_ARRAY_BUFFER_ARB, 0)
             return False
 
+    def deleteAllImages(self):
+        self.images.clear()
+        
+    def deleteAllText(self):
+        del self.texts[:]
+        
     def deleteImage(self, image):
         '''
         Decreases the reference count of the texture by one, and deletes it if nothing is using it anymore

@@ -1,0 +1,30 @@
+Open Ant
+Functional specification
+This document describes the different functionalities that must be implemented before going to next milestone
+
+
+GAME CORE                                                                       
+Milestone 1 : Aboveground                                                       
+Food is passable and movable   [IMPLEMENTED]    [TESTED] 
+Food can be eaten to put health at maximum  [PARTIALLY IMPLEMENTED]   
+Pebble is passable and movable only by the yellow ant  [PARTIALLY IMPLEMENTED]    
+Ant can carry one item only  [IMPLEMENTED]    [NOT TESTED] 
+Only one item and one creature can be on the same tile at one time (no multiple items/creature) [IMPLEMENTED]    [TESTED] 
+Ant can move around [IMPLEMENTED]    [TESTED] 
+Rocky tiles aren't passable and can't contain items [IMPLEMENTED]    [TESTED] 
+Scent: there are 3 types of scent : Nest, Trail and Alarm [IMPLEMENTED]    [TESTED] 
+Alarm scent is left by yellow ant only. Ants following this trail will attack anythink dangerous near. Alarm scent is washed away by rain and propagates otherwise. Can be left by yellow ant when user choses to [PARTIALLY IMPLEMENTED]
+Trail Scent is automatically left when an ant carry food back to the nest, including yellow ant. Trail scent is not directional. Trail scent is washed away by rain and does not propagates. It depletes over time.[PARTIALLY IMPLEMENTED]
+Nest Scent indicates the proximity of a friendly or unfriendly nest. It doesn't get washed away nor propagates.[NOT IMPLEMENTED]
+Scent has different degrees of strength. The strenth increases when an ant leaving scent walk over a tile. [IMPLEMENTED]    [TESTED]
+Scent slowly propagates to nearby tiles. The Scent depletes over time, after it hasn't been walked over by an ant for a certain time. [IMPLEMENTED]    [TESTED]
+There can be different scent on one tile. [IMPLEMENTED]    [TESTED]
+
+Milestone 2 : Undergound    
+Ants can dig through [Implemented][Tested]
+Yellow when yellow ant dig at top row, a nest entry appears at random place at the surface [implemented] [TESTED]
+Black ants can't dig top row [NOT IMPLEMENTED]
+Milestone 3 : Populate
+*tbd*
+Milestone 4 : AI          
+*tbd*
