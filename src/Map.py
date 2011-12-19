@@ -66,24 +66,21 @@ class Map():
         #Populate list of ground tiles
         dirList = os.listdir(self.groundTilesPath)
         for fname in dirList:
-            if(fname != "Thumbs.db"):
-                self.groundTiles.append(Tile(self.groundTilesPath + fname, True))
+            self.groundTiles.append(Tile(self.groundTilesPath + fname, True))
 
         #Populate list of underground tiles
         dirList = os.listdir(self.undergroundTilesPath)
         for fname in dirList:
-            if(fname != "Thumbs.db"):
-                if (fname == "underground1.png"):#underground2.png is for tunnels
-                    self.undergroundTiles.append(Tile(self.undergroundTilesPath + fname, True))
+            if (fname == "underground1.png"):#underground2.png is for tunnels
+                self.undergroundTiles.append(Tile(self.undergroundTilesPath + fname, True))
 
         #Populate list of foliage tiles
         dirList = os.listdir(self.foliageTilesPath)
         for fname in dirList:
-            if(fname != "Thumbs.db"):
-                if "rock" in fname:
-                    self.foliageTiles.append(Tile(self.foliageTilesPath + fname, False))
-                else:
-                    self.foliageTiles.append(Tile(self.foliageTilesPath + fname, True))
+            if "rock" in fname:
+                self.foliageTiles.append(Tile(self.foliageTilesPath + fname, False))
+            else:
+                self.foliageTiles.append(Tile(self.foliageTilesPath + fname, True))
 
         self.tiles = numpy.empty([Globals.mapwidth, Globals.mapheight * 2], dtype=object)
         Globals.glwidget.mouseMove.connect(self.moveCamera)
